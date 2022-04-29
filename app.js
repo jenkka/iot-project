@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const session = require("express-session");
+const session = require("cookie-session");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const Schema = mongoose.Schema;
@@ -14,7 +14,11 @@ const SESSION_SECRET = "iot123";
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24
+    }
 }));
 
 app.use(passport.initialize());
