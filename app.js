@@ -8,7 +8,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const axios = require("axios");
 
 const app = express();
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 
 const SESSION_SECRET = "iot123";
 app.use(session({
