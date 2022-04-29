@@ -281,6 +281,7 @@ app.post("/edit_bus", function(req, res) {
         channelId: req.body.channelId,
         apiKey: req.body.apiKey
     };
+    console.log(vehicleUpdates)
 
     Vehicle.findOneAndUpdate({ id: req.body.id }, { $set: vehicleUpdates }, { returnNewDocument: true }, function(err, docs) {
         if (err) { console.log(err) }
