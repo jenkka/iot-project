@@ -1,0 +1,29 @@
+<%- include("partials/header"); -%>
+
+<div class="user-card">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <form class="form" action="/register" method="post">
+            <input type="email" name="username" class="form-control" placeholder="Correo electrónico" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            <input type="text" name="name" class="form-control" placeholder="Nombre">
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="mujer" required>
+                <label class="form-check-label" for="inlineRadio1">Mujer</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="hombre" required>
+                <label class="form-check-label" for="inlineRadio2">Hombre</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="otro" required>
+                <label class="form-check-label" for="inlineRadio3">Otro</label>
+              </div>
+
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Iniciar sesión</button>
+        </form><!-- /form -->
+    </div><!-- /card-container -->
+</div><!-- /container -->
+
+<%- include("partials/footer"); -%>

@@ -1,0 +1,27 @@
+<%- include("partials/header"); -%>
+
+<div class="home-body">
+    <img class="img-responsive mx-auto d-block home-logo" src="images/bus_logo.png" alt="home_image">
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <form class="card card-sm border-0" action="/bus" method="get">
+                <div class="card-body no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+    
+                    <div class="col mb-4">
+                        <input class="form-control form-control-lg form-control-borderless" type="search" name="id" placeholder="Introduzca el ID del autobús">
+                    </div>
+    
+                    <div class="col text-center">
+                        <button class="btn btn-lg btn-outline-primary" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer"); -%>

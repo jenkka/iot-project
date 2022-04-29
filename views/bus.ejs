@@ -1,0 +1,103 @@
+<%- include("partials/header"); -%>
+
+<div class="bus-page">
+    <h3>Información del vehículo</h3>
+    <h5>ID: <%=id%></h5>
+    <h5>Ruta: <%=route%></h5>
+    
+    <div class="bus-graphs row">
+        <!-- Pasajeros -->
+        <div class="col-xl-3 col-lg-6 mb-4">
+            <div class="bg-white rounded-lg p-5 shadow">
+              <h2 class="h6 font-weight-bold text-center mb-4">Pasajeros</h2>
+      
+              <div class="progress mx-auto" data-value-current='<%=currentPassengers%>' data-value-max="<%=passengerLimit%>">
+                <span class="progress-left">
+                              <span class="progress-bar border-primary"></span>
+                </span>
+                <span class="progress-right">
+                              <span class="progress-bar border-primary"></span>
+                </span>
+                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                  <div class="h3"><%=currentPassengers%> / <%=passengerLimit%></sup></div>
+                </div>
+              </div>
+      
+              <!-- <div class="row text-center mt-4">
+                <div class="col-6 border-right">
+                  <div class="h4 font-weight-bold mb-0">28%</div><span class="small text-gray">Última semana</span>
+                </div>
+                <div class="col-6">
+                  <div class="h4 font-weight-bold mb-0">60%</div><span class="small text-gray">Último mes</span>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+        <!-- Asientos utilizados -->
+        <div class="col-xl-3 col-lg-6 mb-4">
+            <div class="bg-white rounded-lg p-5 shadow">
+              <h2 class="h6 font-weight-bold text-center mb-4">Asientos utilizados</h2>
+      
+              <div class="progress mx-auto" data-value-current='<%=seatsInUse%>' data-value-max="<%=seats%>">
+                <span class="progress-left">
+                              <span class="progress-bar border-primary"></span>
+                </span>
+                <span class="progress-right">
+                              <span class="progress-bar border-primary"></span>
+                </span>
+                <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                  <div class="h3"><%=seatsInUse%> / <%=seats%></sup></div>
+                </div>
+              </div>
+      
+              <!-- <div class="row text-center mt-4">
+                <div class="col-6 border-right">
+                  <div class="h4 font-weight-bold mb-0">28%</div><span class="small text-gray">Última semana</span>
+                </div>
+                <div class="col-6">
+                  <div class="h4 font-weight-bold mb-0">60%</div><span class="small text-gray">Último mes</span>
+                </div>
+              </div> -->
+            </div>
+          </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+
+        $(".progress").each(function() {
+            var currentValue = $(this).attr('data-value-current');
+            var maxValue = $(this).attr('data-value-max');
+            var value = currentValue * 100 / maxValue;
+            console.log("current value " + currentValue)
+            console.log("max value"+maxValue)
+
+            if (Number(currentValue) > Number(maxValue)) {
+              value = 100;
+            }
+
+            var left = $(this).find('.progress-left .progress-bar');
+            var right = $(this).find('.progress-right .progress-bar');
+
+            if (value > 0) {
+                if (value <= 50) {
+                    right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+                } else {
+                    right.css('transform', 'rotate(180deg)')
+                    left.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)')
+                }
+            }
+            
+        })
+
+        function percentageToDegrees(percentage) {
+            return percentage / 100 * 360
+        }
+
+    });
+</script>
+
+<%- include("partials/footer"); -%>

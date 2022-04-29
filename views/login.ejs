@@ -1,0 +1,16 @@
+<%- include("partials/header"); -%>
+
+<div class="user-card">
+    <div class="card card-container">
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <form class="form" action="/login" method="post">
+            <input type="email" name="username" class="form-control" placeholder="Correo electrónico" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Iniciar sesión</button>
+        </form><!-- /form -->
+
+        <p>No tienes cuenta? <a href="/register">Registrarse</a></p>
+    </div><!-- /card-container -->
+</div><!-- /container -->
+
+<%- include("partials/footer"); -%>

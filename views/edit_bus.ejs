@@ -1,0 +1,28 @@
+<%- include("partials/header"); -%>
+
+<div class="bus-form">
+    <h3>Editar unidad</h3>
+    <form class="form edit-form col-10" action="/edit_bus" method="post">
+        <p>Ruta</p>
+        <input type="text" name="route" class="form-control" value="<%= route %>" required autofocus>
+        
+        <p>ID</p>
+        <input type="text" name="id" class="form-control" value="<%= id %>" readonly>
+
+        <p>Número de asientos</p>
+        <input type="number" name="seats" class="form-control" value="<%= seats %>" required>
+
+        <p>Carga máxima de pasajeros</p>
+        <input type="number" name="pasengerLimit" class="form-control" value="<%= passengerLimit %>" required>
+        
+        <p>ChannelID de la plataforma IoT</p>
+        <input type="text" name="channelId" class="form-control" value="<%= channelId %>" required>
+
+        <p>API Key de la plataforma Iot (si el canal es privado)</p>
+        <input type="text" name="apiKey" class="form-control" value="<%= apiKey %>">
+        
+        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Añadir</button>
+    </form>
+</div>
+
+<%- include("partials/footer"); -%>

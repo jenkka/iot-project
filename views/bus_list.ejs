@@ -1,0 +1,35 @@
+<%- include("partials/header"); -%>
+<div class="bus-list">
+    <h3><%=greeting%>, <%=name%></h3>
+
+    <table class="table table-hover mt-5">
+        <thead>
+          <tr>
+            <th scope="col">Ruta</th>
+            <th scope="col">ID del vehículo</th>
+            <th scope="col">Número de asientos</th>
+            <th scope="col">Carga máxima de pasajeros</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% for (let i = 0; i < buses.length; i++) { %>
+            <tr>
+              <td><%= buses[i].route %></th>
+              <td><a href="/bus?id=<%= buses[i].id %>"><%= buses[i].id %></a></td>
+              <td><%= buses[i].seatsInUse %> / <%= buses[i].seats %></td>
+              <td><%= buses[i].currentPassengers %> / <%= buses[i].passengerLimit %></td>
+              <td>    
+                  <a name="" id="" class="btn btn-primary py-1" href="/edit_bus?id=<%= buses[i].id %>" role="button">Editar</a>
+                  <a name="" id="" class="btn btn-primary py-1" href="/delete_bus?id=<%= buses[i].id %>" role="button">Eliminar</a>
+              </td>
+            </tr>
+          <% }; %>
+        </tbody>
+    </table>
+
+    <a name="" id="" class="btn btn-primary" href="/add_bus" role="button">Añadir</a>
+</div>
+
+<%- include("partials/footer"); -%>
