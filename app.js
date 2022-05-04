@@ -59,7 +59,9 @@ const vehicleSchema = new Schema({
     seats: Number,
     passengerLimit: Number,
     channelId: String,
-    apiKey: String
+    apiKey: String,
+    liked: [],
+    disliked: []
 });
 const Vehicle = mongoose.model("Vehicle", vehicleSchema);
 
@@ -139,6 +141,60 @@ app.post("/register", function(req, res) {
     }
 });
 
+app.get("/toggle_like", function(req, res) {
+    if (req.query.id === undefined || req.query.username === undefined) {
+        console.log("Need more arguments.")
+        return;
+    }
+    Vehicle.findOne({ id: req.query.id }, function(err, docs) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (docs) {
+                var index = docs.liked.indexOf(req.query.username);
+                if (index !== -1) {
+                    Vehicle.updateOne({ id: req.query.id }, { $pull: { liked: req.query.username }}, function(err, data) {
+                        res.redirect("/bus?id=" + req.query.id);
+                    });
+                } else {
+                    Vehicle.updateOne({ id: req.query.id }, { $push: { liked: req.query.username }}, function(err, data) {
+                        Vehicle.updateOne({ id: req.query.id }, { $pull:  { disliked: req.query.username }}, function(err, data2) {
+                            res.redirect("/bus?id=" + req.query.id);
+                        })
+                    });
+                }
+            }
+        }
+    });
+});
+
+app.get("/toggle_dislike", function(req, res) {
+    if (req.query.id === undefined || req.query.username === undefined) {
+        console.log("Need more arguments.")
+        return;
+    }
+    Vehicle.findOne({ id: req.query.id }, function(err, docs) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (docs) {
+                var index = docs.disliked.indexOf(req.query.username);
+                if (index !== -1) {
+                    Vehicle.updateOne({ id: req.query.id }, { $pull: { disliked: req.query.username }}, function(err, data) {
+                        res.redirect("/bus?id=" + req.query.id);
+                    });
+                } else {
+                    Vehicle.updateOne({ id: req.query.id }, { $push: { disliked: req.query.username }}, function(err, data) {
+                        Vehicle.updateOne({ id: req.query.id }, { $pull: { liked: req.query.username }}, function(err, data2) {
+                            res.redirect("/bus?id=" + req.query.id);
+                        })
+                    });
+                }
+            }
+        }
+    })
+});
+
 app.get("/bus", function(req, res) {
     Vehicle.findOne({ id: req.query.id }, function(err, docs) {
         if (err) {
@@ -153,17 +209,43 @@ app.get("/bus", function(req, res) {
 
                 axios.get(iotURL)
                     .then(response => {
-                        const currentPassengers = response.data.feeds[0].field1;
-                        const seatsInUse = response.data.feeds[0].field2;
+                        let currentPassengers = response.data.feeds[0].field1;
+                        let seatsInUse = response.data.feeds[0].field2;
 
-                        res.render("bus", { 
+                        if (Number(currentPassengers) < 0) {
+                            currentPassengers = 0;
+                        } else if (Number(currentPassengers > docs.passengerLimit)) {
+                            currentPassengers = docs.passengerLimit;
+                        }
+
+                        if (Number(seatsInUse) < 0) {
+                            seatsInUse = 0;
+                        } else if (Number(seatsInUse > docs.seats)) {
+                            seatsInUse = docs.seats;
+                        }
+
+                        let vars = {
                             id: docs.id, 
                             route: docs.route,
                             currentPassengers: currentPassengers,
                             passengerLimit: docs.passengerLimit,
                             seats: docs.seats,
-                            seatsInUse: seatsInUse
-                        });
+                            seatsInUse: seatsInUse, 
+                            likes: docs.liked.length,
+                            dislikes: docs.disliked.length,
+                            ratingState: "neutral"
+                        }
+
+                        if (req.isAuthenticated()) {
+                            vars.username = req.user.username;
+                            if (docs.liked.includes(req.user.username)) {
+                                vars.ratingState = "liked";
+                            } else if (docs.disliked.includes(req.user.username)) {
+                                vars.ratingState = "disliked";
+                            }
+                        }
+
+                        res.render("bus", vars);
                     });
             } else {
                 res.redirect("/not_found");
@@ -197,8 +279,20 @@ app.get("/bus_list", function(req, res) {
                         promises.push(
                             axios.get(iotURL)
                                 .then(response => {
-                                    const currentPassengers = response.data.feeds[0].field1;
-                                    const seatsInUse = response.data.feeds[0].field2;
+                                    let currentPassengers = response.data.feeds[0].field1;
+                                    let seatsInUse = response.data.feeds[0].field2;
+
+                                    if (Number(currentPassengers) < 0) {
+                                        currentPassengers = 0;
+                                    } else if (Number(currentPassengers > docs.passengerLimit)) {
+                                        currentPassengers = docs.passengerLimit;
+                                    }
+            
+                                    if (Number(seatsInUse) < 0) {
+                                        seatsInUse = 0;
+                                    } else if (Number(seatsInUse > docs.seats)) {
+                                        seatsInUse = docs.seats;
+                                    }
         
                                     const newBus = {
                                         route: bus.route,

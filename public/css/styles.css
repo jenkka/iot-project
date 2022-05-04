@@ -2,6 +2,19 @@ body, html {
     height: 100%;
 }
 
+
+.icon_off {
+    color: gray;
+}
+
+.like_icon_on {
+    color:rgb(12, 97, 33);
+}
+
+.dislike_icon_on {
+    color: red;
+}
+
 .home-logo {
     max-width: 250px;
 }
